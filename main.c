@@ -268,6 +268,15 @@ void question1_C(){
     }
 }
 
+void question1_D(){
+    FILE *f = fopen("error_text.txt", "r");
+    if(f == NULL){
+        exit(EXIT_FAILURE);
+    }else{
+        
+    }
+}
+
 int main(void) {
     question1_C();
 }
