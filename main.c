@@ -51,7 +51,7 @@ void checkInput(int returned, int expectedValue){
         printf("Invalid input \n");
     }
 }
-
+//manages the logic and calls for question 1_B
 void question1_B(void){
     /*
      * artichokes (a)- 2.05/KG
@@ -209,7 +209,7 @@ bool checkString(int charNum , const char str1[], const char str2[],bool htmlChe
         return false;
     }
 }
-
+//manages the logic and calls for question 1_C
 void question1_C(){
     //reads the file input.txt
     //works out if the file is a C file or if it is a HTML file.
