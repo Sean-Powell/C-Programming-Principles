@@ -39,12 +39,13 @@ void question1_A(void){
     //prints how long it took for joan's balance to become greater than tom's
     printf("It took %d years for joan's balance of %.2lf€ to over take tom's balance %.2lf€ \n", numberOfYears, joansBalance, tomsBalance);
 }
-
+//empties the rest of the buffer of unneeded data
 void clearBuffer(){
     char ch;
     while((ch = getchar()) != '\n');
 }
 
+//checks to see if the expected return value was returned
 void checkInput(int returned, int expectedValue){
     if(returned != expectedValue){
         printf("Invalid input \n");
@@ -191,19 +192,17 @@ void question1_B(void){
     }
 }
 
+//returns true if a match is found.
 bool checkString(int charNum , const char str1[], const char str2[],bool htmlCheck){
-
-
     int x = 0; //x + 1 also serves as to check if the match was successful as it will only be the length of the string if it matches
     for(int i = charNum; i < (int) sizeof(str2) - 1; i++){
         if(str1[i] == str2[x]){
             x++;
-            //does a case insensitive check if htmlCheck is true and str2[i] i a letter and not a symbol
+            //does a case insensitive check if htmlCheck is true and str2[i] is a letter and not a symbol
         }else if(str1[i] == (str2[x] + 32) && htmlCheck && (((str2[i] + 32) > 65 && (str2[i] + 32) < 90 ) || (((str2[i] + 32) > 97) && (str2[i] + 32) < 122))){
             x++;
         }
     }
-    int size = (int) sizeof(str2);
     if(x == ((int) sizeof(str2) - 1)){
         return true;
     }else{
@@ -216,6 +215,7 @@ void question1_C(){
     //works out if the file is a C file or if it is a HTML file.
     //first line == #include or <HTML>
     //last line in case of </HTML>
+    //required decelerations
     FILE *f = fopen("input.txt", "r");
     char * line = NULL;
     size_t length  = 0;
@@ -223,41 +223,46 @@ void question1_C(){
     int charNum = 0;
     bool htmlMatch = false;
     bool cMatch = false;
+
+    //checks if there has been an error opening the file
     if(f == NULL){
         exit(EXIT_FAILURE);
-    }else{
-        while((getline(&line, &length, f)) != -1){
+    }else {
+        while ((getline(&line, &length, f)) != -1) {
             printf("%s\n", line);
             currentChar = line[charNum];
 
-            for(int i = 0; i < length; i++){
-                if(line[i] == '\r' || line[i] == '\n'){
+            //removes the end of line characters that are not needed for the process
+            for (int i = 0; i < length; i++) {
+                if (line[i] == '\r' || line[i] == '\n') {
                     line[i] = '\0';
                 }
             }
 
-            while((currentChar == 32 || currentChar == 9) && charNum <= (int) length){
+            //makes a note of any tabs and spaces in front of the start of a line
+            while ((currentChar == 32 || currentChar == 9) && charNum <= (int) length) {
                 charNum++;
                 currentChar = line[charNum];
             }
-
-            if(checkString(charNum, line, "<HTML>", true)){//checks for HTML Header
+            //checks to see if <HTML> is in the file
+            if (checkString(charNum, line, "<HTML>", true)) {//checks for HTML Header
                 printf("HTML file type\n");
                 htmlMatch = true;
             }
-
-            if(checkString(charNum, line, "</HTML>", true)){ //checks for HTML Footer
+            //checks to see if </HTML> is in the file
+            if (checkString(charNum, line, "</HTML>", true)) { //checks for HTML Footer
                 printf("HTML file type\n");
                 htmlMatch = true;
             }
-
-            if(checkString(charNum, line, "#include", false)){//Checks for #include
+            //checks to see if #include is in the file
+            if (checkString(charNum, line, "#include", false)) {//Checks for #include
                 printf("C file type\n");
                 cMatch = true;
             }
         }
     }
 
+    //checks to see if the file has been flagged as a C file or HTML file, if not says "other file type"
     if(cMatch == false && htmlMatch == false){
         printf("Other file type\n");
     }
