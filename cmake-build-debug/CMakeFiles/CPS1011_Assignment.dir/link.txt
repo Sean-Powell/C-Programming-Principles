@@ -1,0 +1,1 @@
+/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/CPS1011_Assignment.dir/main.c.o  -o CPS1011_Assignment.exe -Wl,--out-implib,libCPS1011_Assignment.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
