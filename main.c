@@ -79,8 +79,9 @@ void question1_B(void){
     double shippingCost = 0;
     const float discountPercentage = 0.05;
     double discountAmount = 0;
+    int tempCounter;
     //input variables
-    char input;
+    char input, temp;
     double amountWanted;
     //loop control values
     bool loop = true;
@@ -89,105 +90,113 @@ void question1_B(void){
     while(loop){
         printf("Input q to go to checkout, a to buy artichokes, b to buy onions, c to buy carrots\n");
         input = getchar();
+        tempCounter = 0;
+        while((temp = getchar()) != '\0' && temp != '\n'){
+            tempCounter++;
+        }
         clearBuffer();
-
-        switch(input){
-            case 'q'://processing the checkout
-                printf("q\n");
-                loop = false;//ends the main loop
-                //works out the weights and cost of items
-                totalWeight = a + b + c;
-                printf("%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
-                printf("%.2fKG of onions costing %.2lf€\n" , b, b * bCost);
-                printf("%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
-                totalCost = (a * aCost) + (b * bCost) + (c * cCost);
-                if(totalCost >= 100){//checks if a discount needs to be applied
-                    discountAmount = totalCost * discountPercentage;
-                    printf("discount of %.2lf€ applied\n", discountAmount);
-                }
-                //works out shipping cost
-                if(totalWeight <= 5){
-                    shippingCost = 6.5;
-                }else if(totalWeight < 20){
-                    shippingCost = 14;
-                }else{
-                    shippingCost = 14 + (totalWeight * 0.5);
-                }
-                printf("Shipping of %.2lfkg costing %.2lf€\n", totalWeight, shippingCost);
-                totalCost = totalCost - discountAmount + shippingCost;//works out the final cost after discounts and shipping
-                printf("Total cost of %.2lf€\n",  totalCost);
-                printf("Would you like to save this receipt to file? Y - Yes, N - No\n");
-                while(!validInput) { //loop waiting for Y or N
-                    input = getchar();
-                    clearBuffer();
-                    switch (input) {
-                        case 'Y':
-                            validInput = true;
-                            printf("Saving\n");
-
-                            //creates a file or opens to it if it already exists and writes to it
-                            FILE *f = fopen("receipt.txt", "w");
-                            if(f == NULL){
-                                printf("ERROR OPENING FIlE");
-                                exit(EXIT_FAILURE);
-                            }else{//writes to the file
-                                fprintf(f, "%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
-                                fprintf(f, "%.2fKG of onions costing %.2lf€\n" , b, b * bCost);
-                                fprintf(f, "%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
-                                if(totalCost >= 100){
-                                    fprintf(f, "discount of %.2lf€ applied\n", discountAmount);
-                                }
-                                fprintf(f, "Shipping of %.2lfKG costing %.2lf€\n", totalWeight, shippingCost);
-                                fprintf(f, "Total cost of %.2lf€",  totalCost);
-                            }
-                            fclose(f);
-                            printf("Saving Successful\n");
-
-                            break;
-                        case 'N':
-                            validInput = true;
-                            printf("Not saving to file. \n");
-                            break;
-                        default:
-                            printf("Invalid input\n");
-                            printf("Please input Y for Yes or N for No\n");
-                            break;
+        if(tempCounter > 0){
+            printf("Invalid input\n");
+        }else {
+            switch (input) {
+                case 'q'://processing the checkout
+                    printf("q\n");
+                    loop = false;//ends the main loop
+                    //works out the weights and cost of items
+                    totalWeight = a + b + c;
+                    printf("%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
+                    printf("%.2fKG of onions costing %.2lf€\n", b, b * bCost);
+                    printf("%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
+                    totalCost = (a * aCost) + (b * bCost) + (c * cCost);
+                    if (totalCost >= 100) {//checks if a discount needs to be applied
+                        discountAmount = totalCost * discountPercentage;
+                        printf("discount of %.2lf€ applied\n", discountAmount);
                     }
-                }
-                break;
-            case 'a'://if a is entered gets the amount of artichokes required
-                printf("Please input the amount of artichokes required\n");
-                checkInput(scanf("%lf", &amountWanted), 1);
-                clearBuffer();
-                if(amountWanted < 0){
-                    printf("Invalid Input \n");
+                    //works out shipping cost
+                    if (totalWeight <= 5) {
+                        shippingCost = 6.5;
+                    } else if (totalWeight < 20) {
+                        shippingCost = 14;
+                    } else {
+                        shippingCost = 14 + (totalWeight * 0.5);
+                    }
+                    printf("Shipping of %.2lfkg costing %.2lf€\n", totalWeight, shippingCost);
+                    totalCost = totalCost - discountAmount +
+                                shippingCost;//works out the final cost after discounts and shipping
+                    printf("Total cost of %.2lf€\n", totalCost);
+                    printf("Would you like to save this receipt to file? Y - Yes, N - No\n");
+                    while (!validInput) { //loop waiting for Y or N
+                        input = getchar();
+                        clearBuffer();
+                        switch (input) {
+                            case 'Y':
+                                validInput = true;
+                                printf("Saving\n");
+
+                                //creates a file or opens to it if it already exists and writes to it
+                                FILE *f = fopen("receipt.txt", "w");
+                                if (f == NULL) {
+                                    printf("ERROR OPENING FIlE");
+                                    exit(EXIT_FAILURE);
+                                } else {//writes to the file
+                                    fprintf(f, "%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
+                                    fprintf(f, "%.2fKG of onions costing %.2lf€\n", b, b * bCost);
+                                    fprintf(f, "%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
+                                    if (totalCost >= 100) {
+                                        fprintf(f, "discount of %.2lf€ applied\n", discountAmount);
+                                    }
+                                    fprintf(f, "Shipping of %.2lfKG costing %.2lf€\n", totalWeight, shippingCost);
+                                    fprintf(f, "Total cost of %.2lf€", totalCost);
+                                }
+                                fclose(f);
+                                printf("Saving Successful\n");
+
+                                break;
+                            case 'N':
+                                validInput = true;
+                                printf("Not saving to file. \n");
+                                break;
+                            default:
+                                printf("Invalid input\n");
+                                printf("Please input Y for Yes or N for No\n");
+                                break;
+                        }
+                    }
                     break;
-                }
-                a += amountWanted;
-                break;
-            case 'b'://if b is entered get teh amount of onions required
-                printf("Please input the amount of onions required\n");
-                checkInput(scanf("%lf", &amountWanted), 1);
-                printf("%lf\n", amountWanted);
-                clearBuffer();
-                if(amountWanted < 0){
-                    printf("Invalid Input \n");
+                case 'a'://if a is entered gets the amount of artichokes required
+                    printf("Please input the amount of artichokes required\n");
+                    checkInput(scanf("%lf", &amountWanted), 1);
+                    clearBuffer();
+                    if (amountWanted < 0) {
+                        printf("Invalid Input \n");
+                        break;
+                    }
+                    a += amountWanted;
                     break;
-                }
-                b += amountWanted;
-                break;
-            case 'c'://if c is entered gets the amount of carrots required
-                printf("Please input the amount of carrots required\n");
-                checkInput(scanf("%lf", &amountWanted), 1);
-                clearBuffer();
-                if(amountWanted < 0){
-                    printf("Invalid Input \n");
+                case 'b'://if b is entered get teh amount of onions required
+                    printf("Please input the amount of onions required\n");
+                    checkInput(scanf("%lf", &amountWanted), 1);
+                    printf("%lf\n", amountWanted);
+                    clearBuffer();
+                    if (amountWanted < 0) {
+                        printf("Invalid Input \n");
+                        break;
+                    }
+                    b += amountWanted;
                     break;
-                }
-                c += amountWanted;
-                break;
-            default:
-                printf("Invalid input \n");
+                case 'c'://if c is entered gets the amount of carrots required
+                    printf("Please input the amount of carrots required\n");
+                    checkInput(scanf("%lf", &amountWanted), 1);
+                    clearBuffer();
+                    if (amountWanted < 0) {
+                        printf("Invalid Input \n");
+                        break;
+                    }
+                    c += amountWanted;
+                    break;
+                default:
+                    printf("Invalid input \n");
+            }
         }
     }
 }
