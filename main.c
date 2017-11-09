@@ -150,7 +150,6 @@ void question1_B(void){
                                 }
                                 fclose(f);
                                 printf("Saving Successful\n");
-
                                 break;
                             case 'N':
                                 validInput = true;
@@ -176,7 +175,6 @@ void question1_B(void){
                 case 'b'://if b is entered get teh amount of onions required
                     printf("Please input the amount of onions required\n");
                     checkInput(scanf("%lf", &amountWanted), 1);
-                    printf("%lf\n", amountWanted);
                     clearBuffer();
                     if (amountWanted < 0) {
                         printf("Invalid Input \n");
@@ -275,17 +273,56 @@ void question1_C(){
     if(cMatch == false && htmlMatch == false){
         printf("Other file type\n");
     }
+    fclose(f);
+}
+
+char* removeChar(int id, const char oldLine[], size_t size){
+    int offset = 0;
+
+    char* newLine = malloc(size * ((int) size) - 1);
+    for(int i = 0; i < ((int) size + 1); i++){
+        if(i == id){
+            offset = 1;
+        }else{
+            newLine[i - offset] = oldLine[i];
+        }
+    }
+    return newLine;
 }
 
 void question1_D(){
     FILE *f = fopen("error_text.txt", "r");
+    FILE *ft = fopen("Temp_Text.txt", "w"); //for holding the corrected lines or lines that have nothing wrong with them
+    size_t length;
+    bool issues;
+    char line[256];
+    char previousChar;
+    char* newLine;
     if(f == NULL){
         exit(EXIT_FAILURE);
     }else{
-        
+        length = sizeof(line);
+        while(fgets(line, (int) length, f)){
+            newLine = line;
+            do{
+                issues = false;
+                previousChar = newLine[0];
+                for(int i = 1; i < (int) length - 1; i++){
+                    if(newLine[i] == 32 && previousChar == 32){// double space has been found
+                        issues = true;
+                        newLine = removeChar(i, newLine, length);
+                    }
+                    previousChar = newLine[i];
+                }
+            }while(issues);
+            fprintf(ft, "%s\n", newLine);
+            printf("%s\n", newLine);
+        }
     }
+    //fclose(f);
+    //fclose(ft);
 }
 
 int main(void) {
-    question1_C();
+    question1_D();
 }
