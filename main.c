@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 
 //works out the interest that will be received based on the current value and the interest rate
 double calculateInterest(double value, float interest){
@@ -305,24 +306,25 @@ void question1_D(){
     if(f == NULL){
         exit(EXIT_FAILURE);
     }else{
-        length = sizeof(line);
+        length = strlen(line);
         while(fgets(line, (int) length, f)){
             newLine = line;
             do{
                 issues = false;
                 previousChar = newLine[0];
+
                 //TODO edge case when error is at the end of a line not followed by a space
                 for(int i = 1; i < (int) length - 1; i++){
                     if(newLine[i] == 32){ //if the char is a space
                         if(!flagNoSpace) { //if it has not been flagged for
                             sinceSpaceCounter = 0;
-                            sinceSpace[256] = {0};
+                            sinceSpace[256] = 0;
                         }else{
                             for(int j = 0; j < sinceSpaceCounter; j++){
                                 if(sinceSpace[j] == 45) {
                                     //found hyphen
                                     sinceSpaceCounter = 0;
-                                    sinceSpace[256] = {0};
+                                    sinceSpace[256] = 0;
                                 }
                             }
                             printf("Possible missing space found in: %s\n", sinceSpace);
@@ -390,7 +392,7 @@ void question1_D(){
                     previousChar = newLine[i];
                 }
             }while(issues);
-
+            printf("Corrected Line %s\n", newLine);
             fprintf(ft, "%s", newLine);
         }
     }
