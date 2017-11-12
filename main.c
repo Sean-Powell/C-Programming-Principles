@@ -295,7 +295,6 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 void question1_D(void){
     FILE *f = fopen("error_text.txt", "r");
-    //TODO locate cause of unxpected end of line chars '\247\346VQ]\001'
     char sinceSpace[255], previousChar, currentChar;
     int charSinceSpace = 0, charSinceSpacePointer = 0;
     char* line = NULL, newLine;
@@ -308,12 +307,9 @@ void question1_D(void){
     fseek(f,pos,SEEK_SET);
     line = malloc((size_t) length);
     fread(line, (size_t) length, 1, f);
-    printf("%s", line);
-
-    printf("%d", (int) strlen(line));
-    for(int i = 0; i < (int) strlen(line); i++){
-
-    }
+    line[length]= '\0';
+    printf("%s\n", line);
+    printf("%d\n", (int) strlen(line));
 }
 
 int main(void) {
