@@ -41,7 +41,7 @@ void question1_A(void){
     printf("It took %d years for joan's balance of %.2lf€ to over take tom's balance %.2lf€ \n", numberOfYears, joansBalance, tomsBalance);
 }
 //empties the rest of the buffer of unneeded data
-void clearBuffer(){
+void clearBuffer(void){
     char ch;
     while((ch = getchar()) != '\n');
 }
@@ -217,8 +217,9 @@ bool checkString(int charNum , const char str1[], const char str2[],bool htmlChe
         return false;
     }
 }
+
 //manages the logic and calls for question 1_C
-void question1_C(){
+void question1_C(void){
     //reads the file input.txt
     //works out if the file is a C file or if it is a HTML file.
     //first line == #include or <HTML>
@@ -292,20 +293,27 @@ char* removeChar(int id, const char oldLine[], size_t size){
 }
 
 
-void question1_D(){
+void question1_D(void){
     FILE *f = fopen("error_text.txt", "r");
+    //TODO locate cause of unxpected end of line chars '\247\346VQ]\001'
     char sinceSpace[255], previousChar, currentChar;
     int charSinceSpace = 0, charSinceSpacePointer = 0;
     char* line = NULL, newLine;
     size_t size;
     bool issues = false;
-    printf("test");
+
     long pos = ftell(f);
     fseek(f,0,SEEK_END);
     long length = ftell(f);
     fseek(f,pos,SEEK_SET);
-    fread(line,length , 1, f);
+    line = malloc((size_t) length);
+    fread(line, (size_t) length, 1, f);
     printf("%s", line);
+
+    printf("%d", (int) strlen(line));
+    for(int i = 0; i < (int) strlen(line); i++){
+
+    }
 }
 
 int main(void) {
