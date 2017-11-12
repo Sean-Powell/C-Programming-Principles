@@ -291,113 +291,21 @@ char* removeChar(int id, const char oldLine[], size_t size){
     return newLine;
 }
 
+
 void question1_D(){
     FILE *f = fopen("error_text.txt", "r");
-    FILE *ft = fopen("Temp_Text.txt", "w"); //for holding the corrected lines or lines that have nothing wrong with them
-    size_t length;
-    bool issues;
-    char line[256];
-    char previousChar, input;
-    char* newLine;
-    char sinceSpace[256],correctedWord1[256],correctedWord2[256];
-    int sinceSpaceCounter = 0, sinceSpacePointer = 0;
-    bool flagNoSpace = false;
-    bool validInput = false;
-    if(f == NULL){
-        exit(EXIT_FAILURE);
-    }else{
-        length = strlen(line);
-        while(fgets(line, (int) length, f)){
-            newLine = line;
-            do{
-                issues = false;
-                previousChar = newLine[0];
-
-                //TODO edge case when error is at the end of a line not followed by a space
-                for(int i = 1; i < (int) length - 1; i++){
-                    if(newLine[i] == 32){ //if the char is a space
-                        if(!flagNoSpace) { //if it has not been flagged for
-                            sinceSpaceCounter = 0;
-                            sinceSpace[256] = 0;
-                        }else{
-                            for(int j = 0; j < sinceSpaceCounter; j++){
-                                if(sinceSpace[j] == 45) {
-                                    //found hyphen
-                                    sinceSpaceCounter = 0;
-                                    sinceSpace[256] = 0;
-                                }
-                            }
-                            printf("Possible missing space found in: %s\n", sinceSpace);
-                            while(!validInput) {
-                                printf("Is this a error? Enter Y for Yes or N for No\n");
-                                input = getchar();
-                                clearBuffer();
-                                switch(input){
-                                    case 'Y':
-                                        validInput = true;
-                                        printf("Please input the corrected text\n");
-                                        scanf("%s %s", correctedWord1, correctedWord2);
-
-                                        for(int j = 0; j < (int) sizeof(correctedWord1); j++){
-                                            newLine[sinceSpacePointer + j] = correctedWord1[j];
-                                        }
-
-                                        newLine[sinceSpacePointer + (int) sizeof(correctedWord1) + 1] = 32;
-
-                                        for(int j = 0; j < (int) sizeof(correctedWord2); j++){
-                                            newLine[sinceSpacePointer + (int) sizeof(correctedWord1) + j + 1] = correctedWord2[j];
-                                        }
-                                        sinceSpacePointer = 0;
-                                        sinceSpaceCounter = 0;
-                                        flagNoSpace = false;
-                                        break;
-                                    case 'N':
-                                        validInput = true;
-                                        printf("Sorry for the error\n");
-                                        flagNoSpace = false;
-                                        sinceSpaceCounter = 0;
-                                        sinceSpacePointer = 0;
-                                        issues = false;
-                                        break;
-                                    default:
-                                        printf("Invalid input\n");
-                                        break;
-                                }
-                            }
-                        }
-                    }else{
-                        if(sinceSpaceCounter == 0){
-                            sinceSpacePointer = i;
-                        }
-                        sinceSpace[sinceSpaceCounter] = newLine[i];
-                        sinceSpaceCounter++;
-                        if(sinceSpaceCounter> 12){
-                            flagNoSpace = true;
-                            issues = true;
-                        }
-                    }
-
-                    if(newLine[i] == 32 && previousChar == 32){// double space has been found
-                        issues = true;
-                        newLine = removeChar(i, newLine, length);
-                    }
-                    if(newLine[i] == 46 && previousChar == 32){//space before a fullstop has been found
-                        issues = true;
-                        newLine = removeChar(i - 1, newLine, length);
-                    }
-                    if(newLine[i] == 44 && previousChar == 32){//space before a comma has been found
-                        issues = true;
-                        newLine = removeChar(i - 1, newLine, length);
-                    }
-                    previousChar = newLine[i];
-                }
-            }while(issues);
-            printf("Corrected Line %s\n", newLine);
-            fprintf(ft, "%s", newLine);
-        }
-    }
-    fclose(f);
-    fclose(ft);
+    char sinceSpace[255], previousChar, currentChar;
+    int charSinceSpace = 0, charSinceSpacePointer = 0;
+    char* line = NULL, newLine;
+    size_t size;
+    bool issues = false;
+    printf("test");
+    long pos = ftell(f);
+    fseek(f,0,SEEK_END);
+    long length = ftell(f);
+    fseek(f,pos,SEEK_SET);
+    fread(line,length , 1, f);
+    printf("%s", line);
 }
 
 int main(void) {
