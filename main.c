@@ -42,8 +42,7 @@ void question1_A(void){
 }
 //empties the rest of the buffer of unneeded data
 void clearBuffer(void){
-    char ch;
-    while((ch = getchar()) != '\n');
+    while(getchar() != '\n');
 }
 
 //checks to see if the expected return value was returned
@@ -90,9 +89,9 @@ void question1_B(void){
 
     while(loop){
         printf("Input q to go to checkout, a to buy artichokes, b to buy onions, c to buy carrots\n");
-        input = getchar();
+        input = (char) getchar();
         tempCounter = 0;
-        while((temp = getchar()) != '\0' && temp != '\n'){
+        while((temp = (char) getchar()) != '\0' && temp != '\n'){
             tempCounter++;
         }
         clearBuffer();
@@ -127,7 +126,7 @@ void question1_B(void){
                     printf("Total cost of %.2lf€\n", totalCost);
                     printf("Would you like to save this receipt to file? Y - Yes, N - No\n");
                     while (!validInput) { //loop waiting for Y or N
-                        input = getchar();
+                        input = (char) getchar();
                         clearBuffer();
                         switch (input) {
                             case 'Y':
@@ -295,11 +294,10 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 void question1_D(void){
     FILE *f = fopen("error_text.txt", "r");
-    char sinceSpace[255], previousChar, currentChar;
-    int charSinceSpace = 0, charSinceSpacePointer = 0;
-    char* line = NULL, newLine;
-    size_t size;
-    bool issues = false;
+    char sinceSpace[255], correctedWord[255], previousChar, currentChar;
+    int sinceSpaceCounter = 0, sinceSpacePointer = 0, newWordCounter = 0;
+    char* line = NULL;
+    bool issues, noSpaceLongerThan12, correctInput;
 
     long pos = ftell(f);
     fseek(f,0,SEEK_END);
@@ -310,6 +308,80 @@ void question1_D(void){
     line[length]= '\0';
     printf("%s\n", line);
     printf("%d\n", (int) strlen(line));
+
+    do{
+        issues = false;
+        noSpaceLongerThan12 = false;
+        //check for no space
+
+        for(int i = 0; i < (int) strlen(line); i++){
+            currentChar = line[i];
+            if(currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == '\0' || currentChar == '.' || currentChar == ','){
+                if(noSpaceLongerThan12 == true){
+                    //TODO add the missing space fixing code
+                    char newLine [strlen(line)];
+                    for(int j = 0; j < sinceSpacePointer - 1; j++){//goes to the start of the missing space word
+                        newLine[j] = line[j];
+                    }
+                    for(int j = 0; j < sinceSpaceCounter; j++){
+                        if(line[j + sinceSpacePointer] == '-'){
+                            issues = false;
+                            noSpaceLongerThan12 = false;
+                            break;
+                        }
+                        printf("%c", line[j + sinceSpacePointer]);
+                    }
+                    printf("\n");
+                    printf("Input Y if it is missing a space input an N if it is not\n");
+                    correctInput = false;
+                    while(!correctInput){
+                        char c = (char) getchar();
+                        clearBuffer();
+                        switch(c){
+                            case 'Y':
+                                //TODO get corrected word input
+                                correctInput = true;
+
+                                while((c = (char) getchar()) != '\n'){
+                                    correctedWord[newWordCounter] = c;
+                                    newWordCounter++;
+                                }
+
+                                for(int j = 0; j < (int) strlen(correctedWord); j++){
+                                    newLine[j + sinceSpacePointer] = correctedWord[j];
+                                }
+                                break;
+                            case 'N':
+                                correctInput = true;
+                                break;
+                            default:
+                                printf("Incorrect Input, Please input Y or N");
+                                break;
+                        }
+                    }
+
+                    int startingPos = (int) (strlen(correctedWord) + sinceSpacePointer);
+                    for(int j = startingPos; j < (int) strlen(line); j++){
+                        newLine[j + startingPos] = line[j];
+                    }
+                }else{
+                    sinceSpaceCounter = 0;
+                }
+
+            }else{
+                if(sinceSpaceCounter == 0){
+                    sinceSpacePointer = i;
+                }
+                sinceSpaceCounter++;
+                sinceSpace[sinceSpaceCounter] = currentChar;
+                if(sinceSpaceCounter > 12){
+                    noSpaceLongerThan12 = true;
+                    issues = true;
+                }
+            }
+        }
+
+    }while(issues);
 }
 
 int main(void) {
