@@ -1,4 +1,4 @@
-C:\Users\user\.CLion2017.2\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment
+C:\Users\seanp\.CLion2017.2\system\cygwin_cmake\bin\cmake.exe -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/cygdrive/c/Users/seanp/Desktop/University/1st Year/1st Semester/Programming Principles in C/Projects/CPS1011_Assignment"
 -- Configuring done
 -- Generating done
--- Build files have been written to: /cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment/cmake-build-debug
+-- Build files have been written to: /cygdrive/c/Users/seanp/Desktop/University/1st Year/1st Semester/Programming Principles in C/Projects/CPS1011_Assignment/cmake-build-debug
