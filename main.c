@@ -293,17 +293,18 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 
 void question1_D(void) {
-    FILE *f = fopen("error_text.txt", "r");
-    char previousChar, currentChar, newLine[255] = {'\0'}, temp[255];
+    //declerations
+    char *line = NULL, previousChar, currentChar, newLine[4096],  temp[255];
     int sinceSpaceCounter = 0, sinceSpacePointer = 0, size;
-    char *line = NULL;
-    bool correctInput, hyphenFound = false, issues;
+    bool correctInput, issues;
 
-    long pos = ftell(f);
-    fseek(f, 0, SEEK_END);
-    long length = ftell(f);
-    fseek(f, pos, SEEK_SET);
-    line = malloc((size_t) length);
+    FILE *f = fopen("error_text.txt", "r");
+
+    long pos = ftell(f);//gets the current position in the file
+    fseek(f, 0, SEEK_END);//goes to the end of the file
+    long length = ftell(f);//gets the length of the file
+    fseek(f, pos, SEEK_SET);//goes back to the original position
+    line = malloc((size_t) length);//allocates an array based on the size of the file
     fread(line, (size_t) length, 1, f);
     line[length] = '\0';
     size = (int) strlen(line);
@@ -312,70 +313,68 @@ void question1_D(void) {
         newLine[i] = line[i];
     }
     newLine[size + 1] = '\0';
-        issues = false;
         for (int i = 0; i < size; i++) {
             currentChar = newLine[i];
-            if (currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == ','  || currentChar == '\0'
-                || currentChar == '.') {
+            //TODO optional improve the hyphen detection system
+            //finds spaces, also resets the space counter on finding chars that should be ignored
+            if (currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == ',' ||
+                currentChar == '\0' || currentChar == '.' || currentChar == '-') {
                 sinceSpaceCounter = 0;
-            }else{
-                if (sinceSpaceCounter == 0) {
+            } else {
+                if (sinceSpaceCounter == 0) {//sets the pointer so the start of the word can be found
                     sinceSpacePointer = i;
                 }
                 sinceSpaceCounter++;
             }
 
-            if (sinceSpaceCounter > 12) {
-                issues = true;
+            if (sinceSpaceCounter > 12) { //if there is more than 12 chars without a space
                 correctInput = false;
                 printf("Posible missing space in: ");
                 int x = 0;
 
                 while (newLine[sinceSpacePointer + x] != 32 && newLine[sinceSpacePointer + x] != '\n' &&
                        newLine[sinceSpacePointer + x] != '\r' && newLine[sinceSpacePointer + x] != ',' &&
-                       newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0'){
+                       newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0') {
+
                     temp[x] = newLine[sinceSpacePointer + x];
                     x++;
+
                 }
 
-                for (int j = 0; j < (int) strlen(temp); j++) {
-                    if (temp[j] == '-') {
-                        hyphenFound = true;
-                        break;
-                    }
-                }
-                if (!hyphenFound) {
-                    printf("%s", temp);
-                    printf("\n");
-                    printf("Enter Y to confirm and a space will be added and N to do nothing\n");
-                    while (!correctInput) {
-                        char c = (char) getchar();
-                        clearBuffer();
-                        switch (c) {
-                            case 'Y':
-                                correctInput = true;
-                                int sizeOfNewLine = size + 1;
-                                for (int j = sizeOfNewLine; j > 0; j--) {
-                                    if (j > sinceSpacePointer + 12) {
-                                        newLine[j] = newLine[j - 1];
-                                    }else if (j < sinceSpacePointer + 12) {
-                                        newLine[j] = newLine[j];
-                                    }
+                printf("%s", temp);
+                printf("\n");
+                printf("Enter Y to confirm and a space will be added and N to do nothing\n");
+                while (!correctInput) {
+                    char c = (char) getchar();
+                    clearBuffer();
+                    switch (c) {
+                        case 'Y':
+                            correctInput = true;
+                            int sizeOfNewLine = size + 1;
+                            for (int j = sizeOfNewLine; j > 0; j--) {
+                                if (j > sinceSpacePointer + 12) {
+                                    newLine[j] = newLine[j - 1];
+                                } else if (j < sinceSpacePointer + 12) {
+                                    newLine[j] = newLine[j];
                                 }
-                                newLine[sinceSpacePointer + 12] = ' ';
-                                sinceSpaceCounter = 0;
-                                sinceSpacePointer = 0;
-                                memset(temp, '\0', sizeof(temp));
-                                break;
-                            case 'N':
-                                correctInput = true;
-                                break;
-                            default:
-                                printf("Invalid input\n");
-                                break;
-                        }
+                            }
+                            newLine[sinceSpacePointer + 12] = ' ';
+                            sinceSpaceCounter = 0;
+                            sinceSpacePointer = 0;
+                            memset(temp, '\0', sizeof(temp));
+                            break;
+                        case 'N':
+                            correctInput = true;
+                            sinceSpaceCounter = 0;
+                            sinceSpacePointer = 0;
+                            memset(temp, '\0', sizeof(temp));
+                            break;
+                        default:
+                            printf("Invalid input\n");
+                            break;
                     }
                 }
+
             }
         }
 
@@ -384,7 +383,8 @@ void question1_D(void) {
         issues = false;
         for(int i = 1; i < size; i++) {
             //double space found
-            if (previousChar == 32 & newLine[i] == 32) {
+            currentChar = newLine[i];
+            if (previousChar == 32 && currentChar == 32) {
                 issues = true;
                 for (int j = i; j < (int) sizeof(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
@@ -393,7 +393,7 @@ void question1_D(void) {
             }
 
             //found space before a ,
-            if (previousChar == 32 && newLine[i] == 44) {
+            if (previousChar == 32 && currentChar == 44) {
                 issues = true;
                 for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
@@ -402,7 +402,7 @@ void question1_D(void) {
             }
 
             //space before a .
-            if (previousChar == 32 && newLine[i] == 46) {
+            if (previousChar == 32 && currentChar == 46) {
                 issues = true;
                 for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
