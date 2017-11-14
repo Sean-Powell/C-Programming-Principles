@@ -294,7 +294,7 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 void question1_D(void) {
     //declerations
-    char *line = NULL, previousChar, currentChar, newLine[4096],  temp[255];
+    char *line = NULL, previousChar, currentChar, newLine[4096] = {'\0'},  temp[255];
     int sinceSpaceCounter = 0, sinceSpacePointer = 0, size;
     bool correctInput, issues;
 
@@ -420,6 +420,15 @@ void question1_D(void) {
     fclose(f);
 }
 
+int view_stack_frame(void){
+    //TODO return the full stack frame not just this frame
+    printf("%s from (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+}
+
+int question1_E(void){
+    view_stack_frame();
+}
+
 int main(void) {
-    question1_D();
+    question1_E();
 }
