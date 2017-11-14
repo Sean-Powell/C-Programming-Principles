@@ -294,7 +294,7 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 void question1_D(void) {
     FILE *f = fopen("error_text.txt", "r");
-    char previousChar, currentChar, newLine[255], temp[255];
+    char previousChar, currentChar, newLine[255] = {'\0'}, temp[255];
     int sinceSpaceCounter = 0, sinceSpacePointer = 0, size;
     char *line = NULL;
     bool correctInput, hyphenFound = false, issues;
@@ -312,9 +312,7 @@ void question1_D(void) {
         newLine[i] = line[i];
     }
     newLine[size + 1] = '\0';
-    do {
         issues = false;
-        //TODO find out why when more than one long word in a file cuases issues
         for (int i = 0; i < size; i++) {
             currentChar = newLine[i];
             if (currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == ','  || currentChar == '\0'
@@ -324,8 +322,9 @@ void question1_D(void) {
                 if (sinceSpaceCounter == 0) {
                     sinceSpacePointer = i;
                 }
+                sinceSpaceCounter++;
             }
-            sinceSpaceCounter++;
+
             if (sinceSpaceCounter > 12) {
                 issues = true;
                 correctInput = false;
@@ -363,7 +362,7 @@ void question1_D(void) {
                                         newLine[j] = newLine[j];
                                     }
                                 }
-                                newLine[sinceSpacePointer + 12 + 1] = ' ';
+                                newLine[sinceSpacePointer + 12] = ' ';
                                 sinceSpaceCounter = 0;
                                 sinceSpacePointer = 0;
                                 memset(temp, '\0', sizeof(temp));
@@ -381,37 +380,40 @@ void question1_D(void) {
         }
 
     previousChar = newLine[0];
-    for(int i = 1; i < size; i++){
-        //double space found
-        if(previousChar == 32 & newLine[i] == 32){
-            issues = true;
-            for(int j = i; j < (int) sizeof(newLine) - 1; j++){
-                newLine[j] = newLine[j + 1];
+    do{
+        issues = false;
+        for(int i = 1; i < size; i++) {
+            //double space found
+            if (previousChar == 32 & newLine[i] == 32) {
+                issues = true;
+                for (int j = i; j < (int) sizeof(newLine) - 1; j++) {
+                    newLine[j] = newLine[j + 1];
+                }
+                newLine[(int) sizeof(newLine)] = '\0';
             }
-            newLine[(int) sizeof(newLine)] = '\0';
-        }
 
-        //found space before a ,
-        if(previousChar == 32 && newLine[i] == 44){
-            issues = true;
-            for(int j = i - 1; j < (int) sizeof(newLine) - 1; j++){
-                newLine[j] = newLine[j + 1];
+            //found space before a ,
+            if (previousChar == 32 && newLine[i] == 44) {
+                issues = true;
+                for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
+                    newLine[j] = newLine[j + 1];
+                }
+                newLine[(int) sizeof(newLine)] = '\0';
             }
-            newLine[(int) sizeof(newLine)] = '\0';
-        }
 
-        //space before a .
-        if(previousChar == 32 && newLine[i] == 46){
-            issues = true;
-            for(int j = i - 1; j < (int) sizeof(newLine) - 1; j++){
-                newLine[j] = newLine[j + 1];
+            //space before a .
+            if (previousChar == 32 && newLine[i] == 46) {
+                issues = true;
+                for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
+                    newLine[j] = newLine[j + 1];
+                }
+                newLine[(int) sizeof(newLine)] = '\0';
             }
-            newLine[(int) sizeof(newLine)] = '\0';
+            previousChar = newLine[i];
         }
-        previousChar = newLine[i];
-    }
-
     }while(issues);
+    int sizeNewLine = (int) strlen(newLine);
+    newLine[sizeNewLine] = '\0';
     fclose(f);
     f = fopen("error_text.txt", "w");
     fprintf(f, "%s", newLine);
