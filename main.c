@@ -293,7 +293,7 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 
 void question1_D(void) {
-    //declerations
+    //decelerations
     char *line = NULL, previousChar, currentChar, newLine[4096] = {'\0'},  temp[255];
     int sinceSpaceCounter = 0, sinceSpacePointer = 0, size;
     bool correctInput, issues;
@@ -422,7 +422,11 @@ void question1_D(void) {
 
 int view_stack_frame(void){
     //TODO return the full stack frame not just this frame
-    printf("%s from (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+    //printf("%s from (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
+    void *pointer = __builtin_frame_address(0);
+    printf("%p\n", pointer);
+
+    //fprintf(stdout, pointer);
 }
 
 int question1_E(void){
@@ -430,5 +434,40 @@ int question1_E(void){
 }
 
 int main(void) {
-    question1_E();
+    char input;
+    bool loop = true;
+    while(loop){
+        printf("Please input a,b,c,d and e for their respective questions input q to quit\n");
+        input = (char) getchar();
+        clearBuffer();
+        switch (input){
+            case 'a':
+                printf("Starting A\n");
+                question1_A();
+                break;
+            case 'b':
+                printf("Starting B\n");
+                question1_B();
+                break;
+            case 'c':
+                printf("Starting C\n");
+                question1_C();
+                break;
+            case 'd':
+                printf("Starting D\n");
+                question1_D();
+                break;
+            case 'e':
+                printf("Starting E\n");
+                question1_E();
+                break;
+            case 'q':
+                printf("Quitting\n");
+                loop = false;
+                break;
+            default:
+                printf("Invalid input\n");
+                break;
+        }
+    }
 }
