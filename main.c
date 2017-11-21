@@ -208,9 +208,12 @@ bool checkString(int charNum , const char str1[], const char str2[],bool htmlChe
             //does a case insensitive check if htmlCheck is true and str2[i] is a letter and not a symbol
         }else if(str1[i] == (str2[x] + 32) && htmlCheck && (((str2[i] + 32) > 65 && (str2[i] + 32) < 90 ) || (((str2[i] + 32) > 97) && (str2[i] + 32) < 122))){
             x++;
+        }else{
+            break;
         }
     }
-    if(x == ((int) sizeof(str2) - 1)){
+    //7,6,5 being the length - 1 of #include, </HTML>, <HTML> respectively
+    if(x == 7 && htmlCheck == false || x == 5 && htmlCheck == true || x == 6 && htmlCheck == true){
         return true;
     }else{
         return false;
@@ -224,6 +227,8 @@ void question1_C(void){
     //first line == #include or <HTML>
     //last line in case of </HTML>
     //required decelerations
+
+    //TODO make it so spaces don't fuck it up
     FILE *f = fopen("input.txt", "r");
     char * line = NULL;
     size_t length  = 0;
@@ -254,17 +259,14 @@ void question1_C(void){
             }
             //checks to see if <HTML> is in the file
             if (checkString(charNum, line, "<HTML>", true)) {//checks for HTML Header
-                printf("HTML file type\n");
                 htmlMatch = true;
             }
             //checks to see if </HTML> is in the file
             if (checkString(charNum, line, "</HTML>", true)) { //checks for HTML Footer
-                printf("HTML file type\n");
                 htmlMatch = true;
             }
             //checks to see if #include is in the file
             if (checkString(charNum, line, "#include", false)) {//Checks for #include
-                printf("C file type\n");
                 cMatch = true;
             }
         }
@@ -273,6 +275,13 @@ void question1_C(void){
     //checks to see if the file has been flagged as a C file or HTML file, if not says "other file type"
     if(cMatch == false && htmlMatch == false){
         printf("Other file type\n");
+    }else if(cMatch == true && htmlMatch == true){
+        printf("Found elements from both HTML and C in this file\n File is Other File Type\n");
+    }else if(cMatch){
+        printf("C File Type\n");
+    }else{
+        //can only be reached if htmlMatch is true and cMatch is false
+        printf("HTML file type\n");
     }
     fclose(f);
 }
@@ -294,8 +303,8 @@ char* removeChar(int id, const char oldLine[], size_t size){
 
 void question1_D(void) {
     //decelerations
-    char *line = NULL, previousChar, currentChar, newLine[4096] = {'\0'},  temp[255];
-    int sinceSpaceCounter = 0, sinceSpacePointer = 0, size;
+    char *line = NULL, previousChar, currentChar, *newLine,  temp[255];
+    int sinceSpaceCounter = 0, sinceSpacePointer = 0, size, newLineSize;
     bool correctInput, issues;
 
     FILE *f = fopen("error_text.txt", "r");
@@ -305,9 +314,11 @@ void question1_D(void) {
     long length = ftell(f);//gets the length of the file
     fseek(f, pos, SEEK_SET);//goes back to the original position
     line = malloc((size_t) length);//allocates an array based on the size of the file
+    newLine = malloc(((size_t) length + 50)); //allocates an array for the corrected line with space for 50 characters of error
     fread(line, (size_t) length, 1, f);
     line[length] = '\0';
     size = (int) strlen(line);
+    newLineSize = size;
 
     for(int i = 0; i < size; i++){
         newLine[i] = line[i];
@@ -362,6 +373,7 @@ void question1_D(void) {
                             sinceSpaceCounter = 0;
                             sinceSpacePointer = 0;
                             memset(temp, '\0', sizeof(temp));
+                            newLineSize++;
                             break;
                         case 'N':
                             correctInput = true;
@@ -386,34 +398,36 @@ void question1_D(void) {
             currentChar = newLine[i];
             if (previousChar == 32 && currentChar == 32) {
                 issues = true;
-                for (int j = i; j < (int) sizeof(newLine) - 1; j++) {
+                for (int j = i; j < (int) strlen(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
                 }
-                newLine[(int) sizeof(newLine)] = '\0';
+                newLineSize--;
+                newLine[newLineSize] = '\0';
             }
 
             //found space before a ,
             if (previousChar == 32 && currentChar == 44) {
                 issues = true;
-                for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
+                for (int j = i - 1; j < (int) strlen(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
                 }
-                newLine[(int) sizeof(newLine)] = '\0';
+                newLineSize--;
+                newLine[newLineSize] = '\0';
             }
 
             //space before a .
             if (previousChar == 32 && currentChar == 46) {
                 issues = true;
-                for (int j = i - 1; j < (int) sizeof(newLine) - 1; j++) {
+                for (int j = i - 1; j < (int) strlen(newLine) - 1; j++) {
                     newLine[j] = newLine[j + 1];
                 }
-                newLine[(int) sizeof(newLine)] = '\0';
+                newLineSize--;
+                newLine[newLineSize] = '\0';
             }
             previousChar = newLine[i];
         }
     }while(issues);
-    int sizeNewLine = (int) strlen(newLine);
-    newLine[sizeNewLine] = '\0';
+    newLine[newLineSize] = '\0';
     fclose(f);
     f = fopen("error_text.txt", "w");
     fprintf(f, "%s", newLine);
