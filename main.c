@@ -52,7 +52,7 @@ void checkInput(int returned, int expectedValue){
     }
 }
 //manages the logic and calls for question 1_B
-void question1_B(void){
+void question1_B(void) {
     /*
      * artichokes (a)- 2.05/KG
      * onions (b)- 1.15/kg
@@ -87,133 +87,126 @@ void question1_B(void){
     bool loop = true;
     bool validInput = false;
 
-    while(loop){
+    while (loop) {
         printf("Input q to go to checkout, a to buy artichokes, b to buy onions, c to buy carrots\n");
         input = (char) getchar();
-        tempCounter = 0;
-        while((temp = (char) getchar()) != '\0' && temp != '\n'){
-            tempCounter++;
-        }
         clearBuffer();
-        if(tempCounter > 0){
-            printf("Invalid input\n");
-        }else {
-            switch (input) {
-                case 'q'://processing the checkout
-                    printf("q\n");
-                    loop = false;//ends the main loop
-                    //works out the weights and cost of items
-                    totalWeight = a + b + c;
-                    printf("%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
-                    printf("%.2fKG of onions costing %.2lf€\n", b, b * bCost);
-                    printf("%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
-                    totalCost = (a * aCost) + (b * bCost) + (c * cCost);
-                    if (totalCost >= 100) {//checks if a discount needs to be applied
-                        discountAmount = totalCost * discountPercentage;
-                        printf("discount of %.2lf€ applied\n", discountAmount);
-                    }
-                    //works out shipping cost
-                    if (totalWeight <= 5) {
-                        shippingCost = 6.5;
-                    } else if (totalWeight < 20) {
-                        shippingCost = 14;
-                    } else {
-                        shippingCost = 14 + (totalWeight * 0.5);
-                    }
-                    printf("Shipping of %.2lfkg costing %.2lf€\n", totalWeight, shippingCost);
-                    totalCost = totalCost - discountAmount +
-                                shippingCost;//works out the final cost after discounts and shipping
-                    printf("Total cost of %.2lf€\n", totalCost);
-                    printf("Would you like to save this receipt to file? Y - Yes, N - No\n");
-                    while (!validInput) { //loop waiting for Y or N
-                        input = (char) getchar();
-                        clearBuffer();
-                        switch (input) {
-                            case 'Y':
-                                validInput = true;
-                                printf("Saving\n");
+        switch (input) {
+            case 'q'://processing the checkout
+                printf("q\n");
+                loop = false;//ends the main loop
+                //works out the weights and cost of items
+                totalWeight = a + b + c;
+                printf("%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
+                printf("%.2fKG of onions costing %.2lf€\n", b, b * bCost);
+                printf("%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
+                totalCost = (a * aCost) + (b * bCost) + (c * cCost);
+                if (totalCost >= 100) {//checks if a discount needs to be applied
+                    discountAmount = totalCost * discountPercentage;
+                    printf("discount of %.2lf€ applied\n", discountAmount);
+                }
+                //works out shipping cost
+                if (totalWeight <= 5) {
+                    shippingCost = 6.5;
+                } else if (totalWeight < 20) {
+                    shippingCost = 14;
+                } else {
+                    shippingCost = 14 + (totalWeight * 0.5);
+                }
+                printf("Shipping of %.2lfkg costing %.2lf€\n", totalWeight, shippingCost);
+                totalCost = totalCost - discountAmount +
+                            shippingCost;//works out the final cost after discounts and shipping
+                printf("Total cost of %.2lf€\n", totalCost);
+                printf("Would you like to save this receipt to file? Y - Yes, N - No\n");
+                while (!validInput) { //loop waiting for Y or N
+                    input = (char) getchar();
+                    clearBuffer();
+                    switch (input) {
+                        case 'Y':
+                            validInput = true;
+                            printf("Saving\n");
 
-                                //creates a file or opens to it if it already exists and writes to it
-                                FILE *f = fopen("receipt.txt", "w");
-                                if (f == NULL) {
-                                    printf("ERROR OPENING FIlE");
-                                    exit(EXIT_FAILURE);
-                                } else {//writes to the file
-                                    fprintf(f, "%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
-                                    fprintf(f, "%.2fKG of onions costing %.2lf€\n", b, b * bCost);
-                                    fprintf(f, "%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
-                                    if (totalCost >= 100) {
-                                        fprintf(f, "discount of %.2lf€ applied\n", discountAmount);
-                                    }
-                                    fprintf(f, "Shipping of %.2lfKG costing %.2lf€\n", totalWeight, shippingCost);
-                                    fprintf(f, "Total cost of %.2lf€", totalCost);
+                            //creates a file or opens to it if it already exists and writes to it
+                            FILE *f = fopen("receipt.txt", "w");
+                            if (f == NULL) {
+                                printf("ERROR OPENING FIlE");
+                                exit(EXIT_FAILURE);
+                            } else {//writes to the file
+                                fprintf(f, "%.2fKG of artichokes costing %.2lf€\n", a, a * aCost);
+                                fprintf(f, "%.2fKG of onions costing %.2lf€\n", b, b * bCost);
+                                fprintf(f, "%.2fKG of carrots costing %.2lf€\n", c, c * cCost);
+                                if (totalCost >= 100) {
+                                    fprintf(f, "discount of %.2lf€ applied\n", discountAmount);
                                 }
-                                fclose(f);
-                                printf("Saving Successful\n");
-                                break;
-                            case 'N':
-                                validInput = true;
-                                printf("Not saving to file. \n");
-                                break;
-                            default:
-                                printf("Invalid input\n");
-                                printf("Please input Y for Yes or N for No\n");
-                                break;
-                        }
+                                fprintf(f, "Shipping of %.2lfKG costing %.2lf€\n", totalWeight, shippingCost);
+                                fprintf(f, "Total cost of %.2lf€", totalCost);
+                            }
+                            fclose(f);
+                            printf("Saving Successful\n");
+                            break;
+                        case 'N':
+                            validInput = true;
+                            printf("Not saving to file. \n");
+                            break;
+                        default:
+                            validInput = false;
+                            printf("Invalid input\n");
+                            printf("Please input Y for Yes or N for No\n");
+                            break;
                     }
+                }
+                break;
+            case 'a'://if a is entered gets the amount of artichokes required
+                printf("Please input the amount of artichokes required\n");
+                checkInput(scanf("%lf", &amountWanted), 1);
+                clearBuffer();
+                if (amountWanted < 0) {
+                    printf("Invalid Input \n");
                     break;
-                case 'a'://if a is entered gets the amount of artichokes required
-                    printf("Please input the amount of artichokes required\n");
-                    checkInput(scanf("%lf", &amountWanted), 1);
-                    clearBuffer();
-                    if (amountWanted < 0) {
-                        printf("Invalid Input \n");
-                        break;
-                    }
-                    a += amountWanted;
+                }
+                a += amountWanted;
+                break;
+            case 'b'://if b is entered get teh amount of onions required
+                printf("Please input the amount of onions required\n");
+                checkInput(scanf("%lf", &amountWanted), 1);
+                clearBuffer();
+                if (amountWanted < 0) {
+                    printf("Invalid Input \n");
                     break;
-                case 'b'://if b is entered get teh amount of onions required
-                    printf("Please input the amount of onions required\n");
-                    checkInput(scanf("%lf", &amountWanted), 1);
-                    clearBuffer();
-                    if (amountWanted < 0) {
-                        printf("Invalid Input \n");
-                        break;
-                    }
-                    b += amountWanted;
+                }
+                b += amountWanted;
+                break;
+            case 'c'://if c is entered gets the amount of carrots required
+                printf("Please input the amount of carrots required\n");
+                checkInput(scanf("%lf", &amountWanted), 1);
+                clearBuffer();
+                if (amountWanted < 0) {
+                    printf("Invalid Input \n");
                     break;
-                case 'c'://if c is entered gets the amount of carrots required
-                    printf("Please input the amount of carrots required\n");
-                    checkInput(scanf("%lf", &amountWanted), 1);
-                    clearBuffer();
-                    if (amountWanted < 0) {
-                        printf("Invalid Input \n");
-                        break;
-                    }
-                    c += amountWanted;
-                    break;
-                default:
-                    printf("Invalid input \n");
-            }
+                }
+                c += amountWanted;
+                break;
+            default:
+                printf("Invalid input \n");
         }
     }
 }
 
 //returns true if a match is found.
-bool checkString(int charNum , const char str1[], const char str2[],bool htmlCheck){
+bool checkString(int charNum , const char str1[], const char str2[], int str2length, bool caseCheck){
     int x = 0; //x + 1 also serves as to check if the match was successful as it will only be the length of the string if it matches
-    for(int i = charNum; i < (int) sizeof(str2) - 1; i++){
+    for(int i = charNum; i < str2length - 1; i++){
         if(str1[i] == str2[x]){
             x++;
-            //does a case insensitive check if htmlCheck is true and str2[i] is a letter and not a symbol
-        }else if(str1[i] == (str2[x] + 32) && htmlCheck && (((str2[i] + 32) > 65 && (str2[i] + 32) < 90 ) || (((str2[i] + 32) > 97) && (str2[i] + 32) < 122))){
+            //does a case insensitive check if caseCheck is true and str2[i] is a letter and not a symbol
+        }else if(str1[i] == (str2[x] + 32) && caseCheck && (((str2[i] + 32) > 65 && (str2[i] + 32) < 90 ) || (((str2[i] + 32) > 97) && (str2[i] + 32) < 122))){
             x++;
         }else{
             break;
         }
     }
     //7,6,5 being the length - 1 of #include, </HTML>, <HTML> respectively
-    if(x == 7 && htmlCheck == false || x == 5 && htmlCheck == true || x == 6 && htmlCheck == true){
+    if(x == 7 && caseCheck == false || x == 5 && caseCheck == true || x == 6 && caseCheck == true){
         return true;
     }else{
         return false;
@@ -228,12 +221,13 @@ void question1_C(void){
     //last line in case of </HTML>
     //required decelerations
 
-    //TODO make it so spaces don't fuck it up
     FILE *f = fopen("input.txt", "r");
     char * line = NULL;
     size_t length  = 0;
-    char currentChar = NULL;
+    char currentChar;
     int charNum = 0;
+    bool htmlHeaderMatch = false;
+    bool htmlFooterMatch = false;
     bool htmlMatch = false;
     bool cMatch = false;
 
@@ -242,43 +236,44 @@ void question1_C(void){
         exit(EXIT_FAILURE);
     }else {
         while ((getline(&line, &length, f)) != -1) {
-            printf("%s\n", line);
-            currentChar = line[charNum];
-
             //removes the end of line characters that are not needed for the process
             for (int i = 0; i < length; i++) {
                 if (line[i] == '\r' || line[i] == '\n') {
                     line[i] = '\0';
                 }
             }
-
+            currentChar = line[charNum];
             //makes a note of any tabs and spaces in front of the start of a line
             while ((currentChar == 32 || currentChar == 9) && charNum <= (int) length) {
                 charNum++;
                 currentChar = line[charNum];
             }
             //checks to see if <HTML> is in the file
-            if (checkString(charNum, line, "<HTML>", true)) {//checks for HTML Header
+            if (checkString(charNum, line, "<HTML>",  6, true)) {//checks for HTML Header
+                htmlHeaderMatch = true;
                 htmlMatch = true;
             }
             //checks to see if </HTML> is in the file
-            if (checkString(charNum, line, "</HTML>", true)) { //checks for HTML Footer
+            if (checkString(charNum, line, "</HTML>", 7, true)) { //checks for HTML Footer
+                htmlFooterMatch = true;
                 htmlMatch = true;
             }
             //checks to see if #include is in the file
-            if (checkString(charNum, line, "#include", false)) {//Checks for #include
+            if (checkString(charNum, line, "#include", 8, false)) {//Checks for #include
                 cMatch = true;
             }
         }
     }
 
     //checks to see if the file has been flagged as a C file or HTML file, if not says "other file type"
-    if(cMatch == false && htmlMatch == false){
+    if(cMatch == false && htmlFooterMatch == false && htmlHeaderMatch == false){
         printf("Other file type\n");
     }else if(cMatch == true && htmlMatch == true){
-        printf("Found elements from both HTML and C in this file\n File is Other File Type\n");
+        printf("Found elements from both HTML and C in this file\n");
     }else if(cMatch){
         printf("C File Type\n");
+    }else if(htmlFooterMatch && !htmlHeaderMatch || !htmlFooterMatch && htmlHeaderMatch){
+        printf("Partial HTML file type\n");
     }else{
         //can only be reached if htmlMatch is true and cMatch is false
         printf("HTML file type\n");
@@ -286,28 +281,18 @@ void question1_C(void){
     fclose(f);
 }
 
-char* removeChar(int id, const char oldLine[], size_t size){
-    int offset = 0;
-
-    char* newLine = malloc(size * ((int) size) - 1);
-    for(int i = 0; i < ((int) size + 1); i++){
-        if(i == id){
-            offset = 1;
-        }else{
-            newLine[i - offset] = oldLine[i];
-        }
-    }
-    return newLine;
-}
-
-
 void question1_D(void) {
     //decelerations
-    char *line = NULL, previousChar, currentChar, *newLine,  temp[255];
+    char *line = NULL, previousChar, currentChar, *newLine, temp[255];
     int sinceSpaceCounter = 0, sinceSpacePointer = 0, size, newLineSize;
     bool correctInput, issues;
 
     FILE *f = fopen("error_text.txt", "r");
+
+    if (f == NULL) {
+        exit(EXIT_FAILURE);
+        return;
+    }
 
     long pos = ftell(f);//gets the current position in the file
     fseek(f, 0, SEEK_END);//goes to the end of the file
@@ -320,80 +305,80 @@ void question1_D(void) {
     size = (int) strlen(line);
     newLineSize = size;
 
-    for(int i = 0; i < size; i++){
+    for (int i = 0; i < size; i++) {
         newLine[i] = line[i];
     }
     newLine[size + 1] = '\0';
-        for (int i = 0; i < size; i++) {
-            currentChar = newLine[i];
-            //TODO optional improve the hyphen detection system
-            //finds spaces, also resets the space counter on finding chars that should be ignored
-            if (currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == ',' ||
-                currentChar == '\0' || currentChar == '.' || currentChar == '-') {
-                sinceSpaceCounter = 0;
-            } else {
-                if (sinceSpaceCounter == 0) {//sets the pointer so the start of the word can be found
-                    sinceSpacePointer = i;
-                }
-                sinceSpaceCounter++;
+
+    for (int i = 0; i < size; i++) {
+        currentChar = newLine[i];
+        //finds spaces, also resets the space counter on finding chars that should be ignored
+        if (currentChar == 32 || currentChar == '\n' || currentChar == '\r' || currentChar == ',' ||
+            currentChar == '\0' || currentChar == '.' || currentChar == '-' || currentChar == '!') {
+            sinceSpaceCounter = 0;
+        } else {
+            if (sinceSpaceCounter == 0) {//sets the pointer so the start of the word can be found
+                sinceSpacePointer = i;
             }
-
-            if (sinceSpaceCounter > 12) { //if there is more than 12 chars without a space
-                correctInput = false;
-                printf("Posible missing space in: ");
-                int x = 0;
-
-                while (newLine[sinceSpacePointer + x] != 32 && newLine[sinceSpacePointer + x] != '\n' &&
-                       newLine[sinceSpacePointer + x] != '\r' && newLine[sinceSpacePointer + x] != ',' &&
-                       newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0') {
-
-                    temp[x] = newLine[sinceSpacePointer + x];
-                    x++;
-
-                }
-
-                printf("%s", temp);
-                printf("\n");
-                printf("Enter Y to confirm and a space will be added and N to do nothing\n");
-                while (!correctInput) {
-                    char c = (char) getchar();
-                    clearBuffer();
-                    switch (c) {
-                        case 'Y':
-                            correctInput = true;
-                            int sizeOfNewLine = size + 1;
-                            for (int j = sizeOfNewLine; j > 0; j--) {
-                                if (j > sinceSpacePointer + 12) {
-                                    newLine[j] = newLine[j - 1];
-                                } else if (j < sinceSpacePointer + 12) {
-                                    newLine[j] = newLine[j];
-                                }
-                            }
-                            newLine[sinceSpacePointer + 12] = ' ';
-                            sinceSpaceCounter = 0;
-                            sinceSpacePointer = 0;
-                            memset(temp, '\0', sizeof(temp));
-                            newLineSize++;
-                            break;
-                        case 'N':
-                            correctInput = true;
-                            sinceSpaceCounter = 0;
-                            sinceSpacePointer = 0;
-                            memset(temp, '\0', sizeof(temp));
-                            break;
-                        default:
-                            printf("Invalid input\n");
-                            break;
-                    }
-                }
-
-            }
+            sinceSpaceCounter++;
         }
 
+        if (sinceSpaceCounter > 12) { //if there is more than 12 chars without a space
+            correctInput = false;
+            printf("Posible missing space in: ");
+            int x = 0;
+
+            while (newLine[sinceSpacePointer + x] != 32 && newLine[sinceSpacePointer + x] != '\n' &&
+                   newLine[sinceSpacePointer + x] != '\r' && newLine[sinceSpacePointer + x] != ',' &&
+                   newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0') {
+
+                temp[x] = newLine[sinceSpacePointer + x];
+                x++;
+
+            }
+
+            printf("%s", temp);
+            printf("\n");
+            printf("Enter Y to confirm and a space will be added and N to do nothing\n");
+            while (!correctInput) {
+                char c = (char) getchar();
+                clearBuffer();
+                switch (c) {
+                    case 'Y':
+                        correctInput = true;
+                        int sizeOfNewLine = size + 1;
+                        for (int j = sizeOfNewLine; j > 0; j--) {
+                            if (j > sinceSpacePointer + 12) {
+                                newLine[j] = newLine[j - 1];
+                            } else if (j < sinceSpacePointer + 12) {
+                                newLine[j] = newLine[j];
+                            }
+                        }
+                        newLine[sinceSpacePointer + 12] = ' ';
+                        sinceSpaceCounter = 0;
+                        sinceSpacePointer = 0;
+                        memset(temp, '\0', sizeof(temp));
+                        newLineSize++;
+                        break;
+                    case 'N':
+                        correctInput = true;
+                        sinceSpaceCounter = 0;
+                        sinceSpacePointer = 0;
+                        memset(temp, '\0', sizeof(temp));
+                        break;
+                    default:
+                        printf("Invalid input\n");
+                        break;
+                }
+            }
+
+        }
+    }
+
     previousChar = newLine[0];
-    do{
+    do {
         issues = false;
-        for(int i = 1; i < size; i++) {
+        for (int i = 1; i < size; i++) {
             //double space found
             currentChar = newLine[i];
             if (previousChar == 32 && currentChar == 32) {
@@ -426,7 +411,7 @@ void question1_D(void) {
             }
             previousChar = newLine[i];
         }
-    }while(issues);
+    } while (issues);
     newLine[newLineSize] = '\0';
     fclose(f);
     f = fopen("error_text.txt", "w");
@@ -435,12 +420,8 @@ void question1_D(void) {
 }
 
 int view_stack_frame(void){
-    //TODO return the full stack frame not just this frame
-    //printf("%s from (%s:%d)\n", __FUNCTION__, __FILE__, __LINE__);
     void *pointer = __builtin_frame_address(0);
     printf("%p\n", pointer);
-
-    //fprintf(stdout, pointer);
 }
 
 int question1_E(void){

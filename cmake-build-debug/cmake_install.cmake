@@ -1,4 +1,4 @@
-# Install script for directory: /cygdrive/c/Users/seanp/CLionProjects/CPS1011_Assignment
+# Install script for directory: /cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -35,5 +35,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/cygdrive/c/Users/seanp/CLionProjects/CPS1011_Assignment/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
