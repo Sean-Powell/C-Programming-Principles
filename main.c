@@ -79,9 +79,8 @@ void question1_B(void) {
     double shippingCost = 0;
     const float discountPercentage = 0.05;
     double discountAmount = 0;
-    int tempCounter;
     //input variables
-    char input, temp;
+    char input;
     double amountWanted;
     //loop control values
     bool loop = true;
