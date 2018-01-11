@@ -1,3 +1,3 @@
-/cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/edit_cache.dir
-/cygdrive/c/Users/user/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/CPS1011_Assignment.dir
+C:/Users/seanp/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/CPS1011_Assignment.dir
+C:/Users/seanp/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/seanp/CLionProjects/CPS1011_Assignment/cmake-build-debug/CMakeFiles/rebuild_cache.dir

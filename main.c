@@ -324,20 +324,20 @@ void question1_D(void) {
 
         if (sinceSpaceCounter > 12) { //if there is more than 12 chars without a space
             correctInput = false;
-            printf("Posible missing space in: ");
+            printf("Possible missing space in: ");
             int x = 0;
 
             while (newLine[sinceSpacePointer + x] != 32 && newLine[sinceSpacePointer + x] != '\n' &&
                    newLine[sinceSpacePointer + x] != '\r' && newLine[sinceSpacePointer + x] != ',' &&
-                   newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0') {
+                   newLine[sinceSpacePointer + x] != '.' && newLine[sinceSpaceCounter + x] != '\0' &&
+                   newLine[sinceSpaceCounter + x] != '!') {
 
                 temp[x] = newLine[sinceSpacePointer + x];
                 x++;
 
             }
 
-            printf("%s", temp);
-            printf("\n");
+            printf("%s\n", temp);
             printf("Enter Y to confirm and a space will be added and N to do nothing\n");
             while (!correctInput) {
                 char c = (char) getchar();
@@ -418,13 +418,15 @@ void question1_D(void) {
     fclose(f);
 }
 
-int view_stack_frame(void){
-    void *pointer = __builtin_frame_address(0);
-    printf("%p\n", pointer);
+void view_stack_frame(const int list[], int size){
+    for(int i = 0; i < size; i++){
+        printf("Element %d stored at %p with value %d\n", i + 1, &list[i], list[i]);
+    }
 }
 
-int question1_E(void){
-    view_stack_frame();
+void question1_E(void){
+    int list[] = {1,2,3,4,5,6,7,8,9,0};
+    view_stack_frame(list, 10);
 }
 
 int main(void) {

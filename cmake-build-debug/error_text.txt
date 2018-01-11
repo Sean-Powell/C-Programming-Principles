@@ -1,4 +1,5 @@
-AVeryLongWord.
-odd number of spaces   .
-even number of spaces    ,
+AVeryLongWor d
+odd number of spaces.
+even number of spaces,
 ALongWord-WithAHyphen
+cts\

@@ -1,1 +1,3 @@
-/usr/bin/cc -g  -Wl,--enable-auto-import CMakeFiles/CPS1011_Assignment.dir/main.c.o  -o CPS1011_Assignment.exe -Wl,--out-implib,libCPS1011_Assignment.dll.a -Wl,--major-image-version,0,--minor-image-version,0 
+"C:\Program Files\JetBrains\CLion 2017.3\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\CPS1011_Assignment.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\CPS1011_Assignment.dir/objects.a @CMakeFiles\CPS1011_Assignment.dir\objects1.rsp
+C:\MinGW\bin\gcc.exe -g   -Wl,--whole-archive CMakeFiles\CPS1011_Assignment.dir/objects.a -Wl,--no-whole-archive  -o CPS1011_Assignment.exe -Wl,--out-implib,libCPS1011_Assignment.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\CPS1011_Assignment.dir\linklibs.rsp
